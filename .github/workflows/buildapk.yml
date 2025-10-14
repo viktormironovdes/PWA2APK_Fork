@@ -1,4 +1,4 @@
-name: Build UCC APK
+name: Build Ultimate Cat Clicker APK
 
 on:
   push:
@@ -16,16 +16,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
         
     - name: Create package.json with Capacitor
       run: |
         echo '{
-          "name": "ucc-offline",
+          "name": "ultimate-cat-clicker", 
           "version": "1.0.0",
-          "type": "module",
           "scripts": {
-            "build": "echo \"Building UCC...\""
+            "build": "echo \"Building Ultimate Cat Clicker...\""
           },
           "devDependencies": {
             "@capacitor/cli": "^5.0.0",
@@ -33,12 +31,15 @@ jobs:
           }
         }' > package.json
         
+    - name: Generate package-lock.json
+      run: npm install --package-lock-only
+      
     - name: Install Capacitor
       run: npm install
       
     - name: Initialize Capacitor
       run: |
-        npx cap init "UCC Offline" "com.justchris.ucc" --web-dir www
+        npx cap init "Ultimate Cat Clicker" "com.justchris.ucc" --web-dir www
         npx cap add android
         
     - name: Copy web assets
@@ -53,6 +54,6 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: ucc-android-apk
+        name: ultimate-cat-clicker-apk
         path: android/app/build/outputs/apk/debug/app-debug.apk
         retention-days: 7
