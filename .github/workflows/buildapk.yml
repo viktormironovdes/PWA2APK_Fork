@@ -1,4 +1,4 @@
-name: Build UCC APK with Capacitor
+name: Build UCC APK
 
 on:
   push:
@@ -10,32 +10,49 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
+    - uses: actions/checkout@v4
+    
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
+        
+    - name: Create package.json with Capacitor
+      run: |
+        echo '{
+          "name": "ucc-offline",
+          "version": "1.0.0",
+          "type": "module",
+          "scripts": {
+            "build": "echo \"Building UCC...\""
+          },
+          "devDependencies": {
+            "@capacitor/cli": "^5.0.0",
+            "@capacitor/android": "^5.0.0"
+          }
+        }' > package.json
         
     - name: Install Capacitor
+      run: npm install
+      
+    - name: Initialize Capacitor
       run: |
-        npm install -g @capacitor/core @capacitor/cli
-        npm install -g @capacitor/android
-        
-    - name: Initialize Capacitor (if first time)
-      run: |
-        npx cap init UCC com.justchris.ucc
+        npx cap init "UCC Offline" "com.justchris.ucc" --web-dir www
         npx cap add android
-        npx cap copy android
         
-    - name: Build APK
+    - name: Copy web assets
+      run: npx cap copy android
+      
+    - name: Build Android APK
       run: |
         cd android
+        chmod +x ./gradlew
         ./gradlew assembleDebug
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: ucc-android-apk
-        path: android/app/build/outputs/apk/debug/*.apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 7
