@@ -1,29 +1,41 @@
-name: Build UCC PWA APK
+name: Build UCC APK with Capacitor
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  build-pwa-apk:
+  build-android:
     runs-on: ubuntu-latest
+    
     steps:
-      # Checkout your repo
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      # Install PWA Builder CLI
-      - name: Install PWA Builder CLI
-        run: |
-          npm install -g @pwabuilder/cli
-
-      # Build PWA into APK
-      - name: Build PWA APK
-        run: |
-          pwa build ./UCC --icon=https://raw.githubusercontent.com/justdev-chris/P2E/main/app.ico --platform=android
-
-      # Upload the APK as artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: UCC-APK
-          path: ./dist/android/*.apk
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install Capacitor
+      run: |
+        npm install -g @capacitor/core @capacitor/cli
+        npm install -g @capacitor/android
+        
+    - name: Initialize Capacitor (if first time)
+      run: |
+        npx cap init UCC com.justchris.ucc
+        npx cap add android
+        npx cap copy android
+        
+    - name: Build APK
+      run: |
+        cd android
+        ./gradlew assembleDebug
+        
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: ucc-android-apk
+        path: android/app/build/outputs/apk/debug/*.apk
