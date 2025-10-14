@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCC Chapter 2 – Ending</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+    .scroll-container {
+      position: absolute;
+      bottom: -100%;
+      width: 100%;
+      animation: scrollUp 60s linear forwards;
+      text-align: center;
+    }
+    @keyframes scrollUp {
+      from { bottom: -100%; }
+      to { bottom: 100%; }
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 2em 0 1em;
+    }
+    .credits, .teaser {
+      margin: 2em 0;
+      line-height: 1.8em;
+    }
+    #continueBtn {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background: #ffaa00;
+      border: none;
+      border-radius: 10px;
+      color: #000;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-container" id="creditsScroll">
+    <h1>🌟 Ultimate Cat Clicker – Chapter 2 Complete 🌟</h1>
+    <div class="credits">
+      Dear user, you have made it this far through the Catverse...<br/>
+      Your paws have left a mark in every corner of this pixel world.<br/><br/>
+      🐾 Developer: justdev-chris<br/>
+      <br/>The ancient ones purr in approval...<br/>
+      And yet, the journey is not over...
+    </div>
+    <div class="teaser">
+      ⚠️ As you rest, something stirs in the shadows...<br/>
+      A tail slithers behind a crumbled statue.<br/>
+      A whisper: "We are not done."<br/><br/>
+      🐾 The Shadow Claw rises once more, but now with an army.<br/>
+      What lies beyond the temple ruins?<br/>
+      What new lands await your paws?<br/>
+      <br/>
+      <strong>Continue to Chapter 3?</strong><br/>
+      (Coming soon...)
+    </div>
+  </div>
+
+  <button id="continueBtn" onclick="alert('Chapter 3 is still being developed! Stay tuned!')">🐾 Continue to Chapter 3?</button>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("continueBtn").style.display = "block";
+    }, 60000); // Show the button after the scroll ends
+  </script>
+</body>
+</html>

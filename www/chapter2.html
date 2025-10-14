@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCC: Story 2 – Whispers of the Purrstige</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #0e0e1a, #1c1c2e);
+      font-family: 'Courier New', monospace;
+      color: #f0f0f0;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    .section {
+      max-width: 700px;
+      margin: 100px auto;
+      padding: 0 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    }
+
+    .visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .title {
+      text-align: center;
+      font-size: 2.5em;
+      margin-top: 60px;
+      color: #ffc2e2;
+    }
+
+    .glow-fish {
+      display: block;
+      margin: 60px auto;
+      width: 80px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { filter: drop-shadow(0 0 5px #7fffd4); }
+      50% { filter: drop-shadow(0 0 15px #7fffd4); }
+    }
+
+    .footer {
+      text-align: center;
+      color: #888;
+      margin: 80px auto;
+      font-size: 0.9em;
+    }
+
+    .footer a {
+      color: #ffc2e2;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">Whispers of the Purrstige</h1>
+
+  <div class="section">It began with a single fish... not ordinary, but glowing—humming with echoes of something ancient.</div>
+
+  <div class="section">The Cat, once a humble fisher of flakes and coins, felt a stir in the air. A call. A memory not its own.</div>
+
+  <div class="section">In the distance, the moon blinked. Once. Twice. A signal. The time had come to return to the Temple of Pawth.</div>
+
+  <div class="section">They say cats have nine lives, but few know: each life tells a different story. And not all of them end in purring.</div>
+
+  <div class="section">A name forgotten by time began to whisper itself into the Cat’s dreams... “Purravitus.”</div>
+
+  <div class="emoji">                   🐠</div>
+
+  <div class="section">To follow the light... or stay in the warm safety of the known? The Cat stepped forward.</div>
+
+  <div class="section">The wind carried voices of cats long gone. “Seek the Gatekeeper.” “Honor the Whiskers.” “Beware the Hollow Fur.”</div>
+
+  <div class="footer">To be continued... <br><br>
+    🐾 <a href="game2.html">Chapter 2</a> (omg u bout to enter new cat realm fr)
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>

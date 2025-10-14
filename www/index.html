@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Cat Clicker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+  * {margin:0; padding:0; box-sizing:border-box; font-family:sans-serif;}
+  body, html {height:100%; overflow:hidden;}
+  
+  /* Splash / Dev Prods */
+  #splash {position:fixed; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#222; color:white; z-index:100;}
+  #splash img {width:120px; height:120px; border-radius:50%; margin-bottom:20px; transform:translateY(50px); animation:slideDown 1s forwards;}
+  #splash p {margin-top:10px; font-size:18px; opacity:0; animation:fadeIn 1s forwards 1s;}
+  @keyframes slideDown {to {transform:translateY(0);}}
+  @keyframes fadeIn {to {opacity:1;}}
+  
+  /* Loading screen */
+  #loading {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#111; color:white; flex-direction:column; align-items:center; justify-content:center; z-index:90;}
+  #loading-bar-container {width:70%; height:30px; background:#333; border-radius:15px; margin-top:20px; position:relative; overflow:hidden;}
+  #loading-bar {height:100%; width:0; background:#ffcc00; border-radius:15px;}
+  #loading-cat {position:absolute; top:-25px; left:0; font-size:25px;}
+  
+  /* Home */
+  #home {display:none; height:100%; width:100%; background:url('loadingbg.png') center/cover no-repeat; display:flex;}
+  nav {width:80px; background:rgba(0,0,0,0.7); display:flex; flex-direction:column; align-items:center; padding-top:20px;}
+  nav a {color:white; margin:15px 0; font-size:24px; text-decoration:none;}
+  #content {flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; position:relative;}
+  
+  /* Floating emojis */
+  .emoji {position:absolute; font-size:20px; animation:float 5s linear infinite;}
+  @keyframes float {0% {transform:translateY(100%);} 100% {transform:translateY(-100%);}}
+</style>
+</head>
+<body onload="startApp()">
+
+<!-- Splash Screen -->
+<div id="splash">
+  <img src="https://avatars.githubusercontent.com/u/185311413?s=400&u=0008ad1eb488786fcd3b717948277a11c921b9f4&v=4" alt="Dev PFP">
+  <p>Made by justdev-chris | Built in HTML5</p>
+</div>
+
+<!-- Loading Screen -->
+<div id="loading" class="flex">
+  <div id="loading-cat">🐱</div>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+  <p>Loading...</p>
+</div>
+
+<!-- Home -->
+<div id="home">
+  <nav>
+    <a href="#">🏠</a>
+    <a href="https://github.com/justdev-chris" target="_blank">🐱</a>
+    <a href="/GMFIXV2/">🎮</a>
+    <a href="assets/seal.html">🦭</a>
+  </nav>
+  <div id="content">
+    <a id="play-btn" href="game.html" class="button">Play 🐾</a>
+  </div>
+</div>
+
+<script>
+function startApp(){
+  // Splash transition
+  setTimeout(()=>{
+    document.getElementById('splash').style.display='none';
+    startLoading();
+  }, 2500);
+}
+
+function startLoading(){
+  document.getElementById('loading').style.display='flex';
+  let bar = document.getElementById('loading-bar');
+  let cat = document.getElementById('loading-cat');
+  let width = 0;
+  let interval = setInterval(()=>{
+    if(width>=100){clearInterval(interval); showHome();}
+    width++;
+    bar.style.width = width + '%';
+    cat.style.left = `calc(${width}% - 15px)`;
+  }, 100);
+}
+
+function showHome(){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('home').style.display='flex';
+  spawnEmojis();
+  
+  // Host check
+  if(location.hostname !== 'catsdevs.online'){
+    alert('You are playing UCC on a different website. This may be a modified version of UCC. For more info, visit https://catsdevs.online/modified. You can continue playing but it may not be official.');
+  }
+
+  // Play button placeholder
+  const playBtn = document.getElementById('play-btn');
+  const audio = new Audio('music/midday paws.wav');
+  playBtn.onclick = ()=>{
+    alert("thanks for playing!");
+    audio.play();
+  };
+}
+
+// Floating emojis
+function spawnEmojis(){
+  const content = document.getElementById('content');
+  for(let i=0;i<15;i++){
+    let e=document.createElement('div');
+    e.classList.add('emoji');
+    e.style.left=Math.random()*80+'%';
+    e.textContent = Math.random()>0.5?'🐱':'🐟';
+    e.style.animationDuration = 3+Math.random()*4+'s';
+    content.appendChild(e);
+  }
+}
+</script>
+</body>
+</html>

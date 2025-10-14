@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cats go brrrr</title>
+    <!-- lol sum og meta tags so when sharing the url yk -->
+    <meta property="og:title" content="cats go brrrr – justdev-chris" />
+    <meta property="og:description" content="catsdevs.online go brrr. Made by justdev-chris!" />
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/185311413?v=4" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://catsdevs.online/about" />
+    <meta name="theme-color" content="#161624" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- nav stuff and sum other stuff -->
+    <nav class="navbar">
+        <span class="site-logo">
+            <img src="https://avatars.githubusercontent.com/u/185311413?v=4" alt="site avatar" />
+            catsdevs.online
+        </span>
+        <div class="nav-links">
+            <a href="/" >home</a>
+            <a href="/about" class="active">about</a>
+            <a href="/" target="_blank">ultimate cat clicker</a>
+            <a href="https://github.com/justdev-chris" target="_blank">github</a>
+            <a href="/assets">chatroom</a>
+            <a href="/assets/femboys">femboys</a>
+            <a href="/assets/seal.html">spinning seal</a>
+            <a href="/GMFIXV2/">games</a>
+        </div>
+        <div class="nav-right">
+            <button class="nav-btn" id="darkModeBtn" title="Toggle dark/light mode">
+                <svg id="darkModeIcon" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="9" stroke="#2d2a5a" stroke-width="2"/>
+                    <path id="moonPath" d="M15 11a4 4 0 1 1-8 0c0-2.2 1.8-4 4-4a4 4 0 0 1 4 4z" fill="#f2b134"/>
+                </svg>
+                dark
+            </button>
+        </div>
+    </nav>
+    <audio id="bg-music" src="track2.mp3" preload="auto"></audio>
+    <div class="container">
+        <div class="header">
+            <img class="profile-img" src="https://avatars.githubusercontent.com/u/185311413?v=4" alt="justdev-chris avatar">
+            <div>
+                <div class="info-block">
+                    <span class="dev-alias">justdev-chris</span>
+                    <span class="pronouns">he/him</span>
+                    <span class="status">🌟 Making things happen</span>
+                </div>
+                <div class="bio">
+                    Coder & game creator. I build cool projects, like games and web stuff.<br>
+                    always learning, always making.
+                </div>
+                <img class="gif-preview" src="https://c.tenor.com/3DzhsHs_8G8AAAAC/tenor.gif" alt="profile gif">
+                <img class="gif-preview" src="background.gif" alt="profile gif">
+            </div>
+        </div>
+
+        <div class="section-title">Projects</div>
+        <div class="projects-list">
+            <div class="project-card">
+                <div>
+                    <div class="project-title">Ultimate Cat Clicker</div>
+                    <div class="project-desc">A fun and addictive cat-themed clicker game. Cats, upgrades, and more cats!</div>
+                </div>
+                <a class="project-link" href="https://catsdevs.online" target="_blank">Play Ultimate Cat Clicker</a>
+            </div>
+            <div class="project-card">
+                <div>
+                    <div class="project-title">TransferNest</div>
+                    <div class="project-desc">Fast, easy, and secure file sharing for everyone. No registration needed.</div>
+                </div>
+                <a class="project-link" href="https://visa20.ct.ws/transfernest.php" target="_blank">Visit TransferNest</a>
+            </div>
+            <div class="project-card">
+                <div>
+                    <div class="project-title">More Projects</div>
+                    <div class="project-desc">I build games, tools, and apps. Check out my work below!</div>
+                </div>
+                <a class="project-link" href="https://github.com/justdev-chris" target="_blank">My GitHub</a>
+            </div>
+        </div>
+
+        <div class="section-title">Links</div>
+        <div class="contact">
+            <a href="https://catsdevs.online" target="_blank">Ultimate Cat Clicker</a>
+            <a href="https://github.com/justdev-chris" target="_blank">GitHub</a>
+            <a href="https://tiktok.com/@chris_230" target="_blank">Tiktok</a>
+        </div>
+
+        <!-- boombox ahh -->
+        <div class="player-wrap" id="player-wrap">
+            <button class="player-btn" id="player-play" title="Play/Pause" aria-label="Play/Pause">▶️</button>
+            <input class="player-slider" id="player-volume" type="range" min="0" max="1" step="0.01" value="0.25" title="Volume">
+            <span class="player-label" id="player-status">volume: 25%</span>
+        </div>
+
+        <!-- changlog -->
+        <div class="changelog">
+            <div class="changelog-title">changelog & updates</div>
+            <ul class="changelog-list">
+                <li>2025-07-25 – added 1 cool thing yay... i added games!</li>
+            </ul>
+        </div>
+    </div>
+    <footer class="footer">
+      <a class="footer-link" href="https://github.com/justdev-chris" target="_blank" rel="noopener noreferrer">
+        <span>made by justdev-chris :3</span>
+      </a>
+    <script src="script.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

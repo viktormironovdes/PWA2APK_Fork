@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🐾 UCC: Chapter 2 – The Temple Beneath the Clicks</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a2b;
+      color: #8effd6;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    #cat {
+      font-size: 6rem;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 15px;
+      padding: 10px 20px;
+      background: #152232;
+      border: 2px solid #8effd6;
+      margin: 20px 0;
+      width: 120px;
+      text-align: center;
+      outline-offset: 4px;
+    }
+    #cat:focus {
+      outline: 3px solid #00ffaa;
+    }
+
+    .counter {
+      font-size: 1.2rem;
+      margin: 5px 0;
+    }
+
+    #progressBar {
+      width: 100%;
+      max-width: 600px;
+      height: 25px;
+      background: #111;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 15px 0;
+      border: 2px solid #8effd6;
+    }
+
+    #progressFill {
+      height: 100%;
+      width: 0;
+      background: #00ffaa;
+      transition: width 0.3s ease-in-out;
+    }
+
+    #eventText {
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    #shop {
+      max-width: 600px;
+      background: #152232;
+      padding: 15px 20px;
+      border-radius: 15px;
+      border: 2px solid #8effd6;
+      margin-bottom: 25px;
+      user-select: none;
+    }
+
+    .shop-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .shop-item button {
+      padding: 5px 10px;
+      font-size: 1rem;
+      border: none;
+      background: #00ffaa;
+      color: #111;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .shop-item button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    .shop-item button:hover:not(:disabled) {
+      background: #00dd88;
+    }
+
+    #purrstigeBtn {
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 15px;
+      background: #00ffaa;
+      color: #111;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 20px;
+      transition: background 0.3s ease;
+    }
+    #purrstigeBtn:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    #purrstigeBtn:hover:not(:disabled) {
+      background: #00dd88;
+    }
+
+    #skinPicker {
+      max-width: 600px;
+      background: #152232;
+      border-radius: 15px;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .skin-option {
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 5px 8px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+      outline-offset: 4px;
+    }
+    .skin-option:hover,
+    .skin-option:focus {
+      border-color: #00ffaa;
+      outline: none;
+    }
+
+    #choicePopup {
+      display: none;
+      max-width: 600px;
+      background: #152232;
+      border-radius: 20px;
+      border: 3px solid #00ffaa;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+      user-select: none;
+    }
+
+    #choicePopup button {
+      font-size: 1.1rem;
+      margin: 10px 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      background: #00ffaa;
+      color: #111;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #choicePopup button:hover {
+      background: #00dd88;
+    }
+
+    #nemesisStory {
+      white-space: pre-wrap;
+      max-width: 600px;
+      background: #111;
+      border-radius: 15px;
+      border: 2px solid #8effd6;
+      color: #8effd6;
+      padding: 15px;
+      margin-top: 30px;
+      font-size: 1rem;
+      user-select: none;
+    }
+
+    #bossFight {
+      white-space: pre-wrap;
+      max-width: 600px;
+      background: #220000;
+      border-radius: 20px;
+      border: 3px solid #ff5555;
+      color: #ff9999;
+      padding: 20px;
+      margin-top: 30px;
+      font-size: 1.1rem;
+      user-select: none;
+      display: none;
+      text-align: center;
+    }
+
+    #bossFight button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 15px;
+      background: #ff5555;
+      color: #330000;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #bossFight button:hover {
+      background: #ff2222;
+    }
+
+    #secretCodeSection {
+      max-width: 600px;
+      margin-top: 40px;
+      background: #152232;
+      border-radius: 15px;
+      border: 2px solid #00ffaa;
+      padding: 15px 20px;
+      user-select: none;
+    }
+    #secretCodeSection h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    #secretCodeInput {
+      width: 70%;
+      padding: 8px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: 2px solid #00ffaa;
+      background: #111;
+      color: #8effd6;
+      outline: none;
+      margin-right: 10px;
+    }
+    #secretCodeInput:focus {
+      border-color: #00dd88;
+    }
+    #secretCodeSection button {
+      padding: 8px 15px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      background: #00ffaa;
+      color: #111;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #secretCodeSection button:hover {
+      background: #00dd88;
+    }
+
+    #secretCodeMessage {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #8effd6;
+      min-height: 1.3em;
+    }
+
+    #ending {
+      max-width: 600px;
+      text-align: center;
+      margin-top: 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #00ffaa;
+      display: none;
+      user-select: none;
+    }
+
+    footer {
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: #444;
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+      #cat {
+        font-size: 4rem;
+        width: 90px;
+      }
+      #shop, #skinPicker, #choicePopup, #nemesisStory, #secretCodeSection, #ending, #bossFight {
+        max-width: 100%;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐾 UCC: Chapter 2 – The Temple Beneath the Clicks</h1>
+
+  <audio id="music" src="https://cdn.pixabay.com/audio/2022/03/17/audio_d90d5e836e.mp3" autoplay loop></audio>
+
+  <div id="cat" aria-label="Cat clicker" role="button" tabindex="0">🐱</div>
+
+  <div class="counter">Footsteps: <span id="footprints">0</span> / 100,000</div>
+  <div class="counter">Steps per Click: <span id="stepValue">1</span></div>
+  <div class="counter">Purrstige Level: <span id="prestige">0</span></div>
+
+  <div id="progressBar" aria-label="Progress bar">
+    <div id="progressFill"></div>
+  </div>
+
+  <div id="eventText">You stand at the temple’s gate. It hums with energy.</div>
+
+  <div id="shop" aria-label="Upgrade Shop">
+    <h3>🛠️ Upgrade Shop</h3>
+    <div class="shop-item">👟 Shoes (+1): 100 steps <button id="buy1" onclick="buyUpgrade(1)">Buy</button></div>
+    <div class="shop-item">🛴 Scooter (+10): 1000 steps <button id="buy10" onclick="buyUpgrade(10)">Buy</button></div>
+    <div class="shop-item">🚗 Catmobile (+50): 5000 steps <button id="buy50" onclick="buyUpgrade(50)">Buy</button></div>
+    <div class="shop-item">🌀 Portal Paw (+1/sec): 10000 steps <button id="buyAuto" onclick="buyAuto()">Buy</button></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <button id="purrstigeBtn" onclick="triggerEnd()">🌟 Reach 100,000 steps</button>
+  </div>
+
+  <div id="skinPicker" aria-label="Cat skin customization" role="list" title="Pick your cat emoji skin">
+    <span class="skin-option" role="listitem" tabindex="0" onclick="changeSkin('🐱')" onkeydown="keySkin(event, '🐱')">🐱</span>
+    <span class="skin-option" role="listitem" tabindex="0" onclick="changeSkin('😺')" onkeydown="keySkin(event, '😺')">😺</span>
+    <span class="skin-option" role="listitem" tabindex="0" onclick="changeSkin('🐈')" onkeydown="keySkin(event, '🐈')">🐈</span>
+    <span class="skin-option" role="listitem" tabindex="0" onclick="changeSkin('😸')" onkeydown="keySkin(event, '😸')">😸</span>
+    <span class="skin-option" role="listitem" tabindex="0" onclick="changeSkin('😻')" onkeydown="keySkin(event, '😻')">😻</span>
+  </div>
+
+  <div id="choicePopup" role="dialog" aria-modal="true" aria-labelledby="choiceTitle" aria-describedby="choiceDesc">
+    <div id="choiceTitle" style="font-weight:bold; font-size:1.4em; margin-bottom:10px;">🐾 You have reached 100,000 footsteps!</div>
+    <div id="choiceDesc">What will you do next?</div>
+    <button onclick="purrstige()">🌟 Activate Purrstige (Reset progress for bonus!)</button>
+    <button onclick="continueLore()">📜 Continue the Lore (Face the Nemesis)</button>
+  </div>
+
+  <div id="nemesisStory" role="region" aria-live="polite" style="display:none;"></div>
+
+  <div id="bossFight" role="region" aria-live="polite">
+    <div id="bossText"></div>
+    <button onclick="attackBoss()">⚔️ Attack!</button>
+  </div>
+
+  <div id="secretCodeSection" style="margin-top: 40px;">
+    <h3>🔐 Enter Secret Code</h3>
+    <input type="text" id="secretCodeInput" placeholder="Enter code here..." aria-label="Secret Code Input"/>
+    <button onclick="checkSecretCode()">Submit</button>
+    <div id="secretCodeMessage"></div>
+  </div>
+
+  <div id="ending">
+    🌟 You've made it to the heart of the temple.<br>
+    The secrets of the Catverse are now yours.<br>
+    The ancient ones purr in approval...
+  </div>
+
+  <footer>No saving. Click your way through the journey.</footer>
+
+<script>
+  let footprints = 0;
+  let stepValue = 1;
+  let prestigeLevel = 0;
+  let autoEnabled = false;
+  let endingShown = false;
+  let inNemesisMode = false;
+  let nemesisProgress = 0;
+
+  // Boss fight variables
+  let bossActive = false;
+  let bossHP = 100;
+  let bossMaxHP = 100;
+
+  const cat = document.getElementById("cat");
+  const fpText = document.getElementById("footprints");
+  const stepText = document.getElementById("stepValue");
+  const prestigeText = document.getElementById("prestige");
+  const progressFill = document.getElementById("progressFill");
+  const eventText = document.getElementById("eventText");
+  const endingBox = document.getElementById("ending");
+  const choicePopup = document.getElementById("choicePopup");
+  const nemesisStory = document.getElementById("nemesisStory");
+  const purrstigeBtn = document.getElementById("purrstigeBtn");
+  const music = document.getElementById("music");
+  const bossFightDiv = document.getElementById("bossFight");
+  const bossText = document.getElementById("bossText");
+  const secretCodeInput = document.getElementById("secretCodeInput");
+  const secretCodeMessage = document.getElementById("secretCodeMessage");
+
+  const bgColors = [
+    "#1a1a2b", "#152232", "#0d1a24", "#2a1a2d", "#331a14", "#0b0b0b"
+  ];
+
+  // Extended lore + nemesis plan messages:
+  const nemesisEvents = [
+    "Dark shadows gather... Whisker’s nemesis stirs in the depths.",
+    "Whispers of an ancient evil echo through the temple halls.",
+    "You discover claw marks and stolen fish bones — signs of foul play.",
+    "A cryptic message: “The Catverse will bow to the Shadow Claw.”",
+    "You sense eyes watching you, plotting... Your nemesis grows stronger.",
+    "The air thickens with menace. The Catverse trembles.",
+    "A sudden chill – your nemesis is near, seeking to rule it all.",
+    "Paws tighten around the temple’s secrets. The final battle looms...",
+  ];
+
+  // Boss fight flavor texts
+  const bossPhases = [
+    "The Shadow Claw appears! Its eyes gleam with dark intent.",
+    "The Shadow Claw lashes out, claws sharp as daggers!",
+    "The Shadow Claw snarls, the temple shakes with its fury!",
+    "The Shadow Claw falters, you sense victory is near!",
+    "The Shadow Claw lets out a final roar before collapsing..."
+  ];
+
+  // Current skin emoji (default)
+  let currentSkin = "🐱";
+
+  function updateUI() {
+    fpText.textContent = footprints.toLocaleString();
+    stepText.textContent = stepValue;
+    prestigeText.textContent = prestigeLevel;
+
+    const percent = Math.min(100, (footprints / 100000) * 100);
+    progressFill.style.width = percent + "%";
+
+    const zone = Math.floor(footprints / 20000);
+    if (!inNemesisMode && !bossActive) {
+      document.body.style.background = bgColors[Math.min(zone, bgColors.length - 1)];
+      eventText.textContent = `Temple Depth: Zone ${zone + 1}`;
+    }
+
+    cat.textContent = currentSkin;
+
+    // Shop buttons enable/disable
+    document.getElementById("buy1").disabled = footprints < 100 || bossActive;
+    document.getElementById("buy10").disabled = footprints < 1000 || bossActive;
+    document.getElementById("buy50").disabled = footprints < 5000 || bossActive;
+    document.getElementById("buyAuto").disabled = footprints < 10000 || autoEnabled || bossActive;
+
+    // Disable main purrstige button if not reached 100k or boss fight active or nemesis mode
+    purrstigeBtn.disabled = footprints < 100000 || bossActive || inNemesisMode;
+
+    if (!endingShown && footprints >= 100000 && !inNemesisMode && !bossActive) {
+      purrstigeBtn.textContent = "🌟 Reach 100,000 steps! Choose your fate...";
+    }
+
+    if (endingShown) {
+      endingBox.style.display = "block";
+    } else {
+      endingBox.style.display = "none";
+    }
+  }
+
+  function buyUpgrade(amount) {
+    let cost = amount * 100;
+    if (footprints >= cost && !bossActive) {
+      footprints -= cost;
+      stepValue += amount;
+      updateUI();
+    } else {
+      alert("Not enough steps or boss fight active!");
+    }
+  }
+
+  function buyAuto() {
+    if (!autoEnabled && footprints >= 10000 && !bossActive) {
+      footprints -= 10000;
+      autoEnabled = true;
+      autoSteps();
+      updateUI();
+    }
+  }
+
+  function autoSteps() {
+    if (!autoEnabled) return;
+    footprints += stepValue;
+    updateUI();
+    setTimeout(autoSteps, 1000);
+  }
+
+  function triggerEnd() {
+    if (footprints >= 100000 && !endingShown && !inNemesisMode && !bossActive) {
+      choicePopup.style.display = "block";
+      purrstigeBtn.disabled = true;
+      cat.setAttribute("aria-disabled", "true");
+      eventText.textContent = "Choose wisely, cat adventurer...";
+    }
+  }
+
+  function purrstige() {
+    choicePopup.style.display = "none";
+    prestigeLevel++;
+    footprints = 0;
+    stepValue = 1 + prestigeLevel * 2; // Boost stepValue by prestige
+    autoEnabled = false;
+    endingShown = false;
+    inNemesisMode = false;
+    bossActive = false;
+    bossFightDiv.style.display = "none";
+    nemesisStory.style.display = "none";
+    eventText.textContent = "Purrstige activated! Your journey resets, but power grows.";
+    updateUI();
+  }
+
+  function continueLore() {
+    choicePopup.style.display = "none";
+    inNemesisMode = true;
+    footprints = 100000;
+    eventText.textContent = "You face your nemesis...";
+    nemesisStory.style.display = "block";
+    nemesisStory.textContent = nemesisEvents[0];
+    let i = 1;
+    let interval = setInterval(() => {
+      if (i < nemesisEvents.length) {
+        nemesisStory.textContent = nemesisEvents[i];
+        i++;
+      } else {
+        clearInterval(interval);
+        startBossFight();
+      }
+    }, 3500);
+  }
+
+  function startBossFight() {
+    bossActive = true;
+    bossHP = bossMaxHP;
+    nemesisStory.style.display = "none";
+    bossFightDiv.style.display = "block";
+    bossText.textContent = bossPhases[0] + "\nHP: " + bossHP;
+  }
+
+  function attackBoss() {
+    if (!bossActive) return;
+    // Player attack
+    let damage = Math.floor(Math.random() * (stepValue * 2)) + 1;
+    bossHP -= damage;
+    bossHP = Math.max(0, bossHP);
+
+    if (bossHP === 0) {
+      bossText.textContent = bossPhases[4] + "\nYou defeated the Shadow Claw!";
+      bossActive = false;
+      nemesisStory.style.display = "block";
+nemesisStory.innerHTML = `The temple is safe... for now.<br>You can Purrstige to restart or continue exploring. Or.. hey<br><a href="theendch2.html">Continue to Chapter 3?</a>`;
+
+      bossFightDiv.style.display = "none";
+      purrstigeBtn.disabled = false;
+      purrstigeBtn.textContent = "🌟 Purrstige and start anew";
+      footprints = 0;
+      stepValue = 1 + prestigeLevel * 2;
+      updateUI();
+    } else {
+      // Boss retaliates
+      let phaseIndex = Math.min(
+        bossPhases.length - 2,
+        Math.floor(((bossMaxHP - bossHP) / bossMaxHP) * (bossPhases.length - 1))
+      );
+      bossText.textContent =
+        bossPhases[phaseIndex] + `\nHP: ${bossHP}\nYou dealt ${damage} damage!`;
+    }
+  }
+
+  function changeSkin(skin) {
+    currentSkin = skin;
+    cat.textContent = currentSkin;
+  }
+
+  function keySkin(e, skin) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      changeSkin(skin);
+    }
+  }
+
+  function checkSecretCode() {
+    const code = secretCodeInput.value.trim().toLowerCase();
+    if (code === "purrmagic") {
+      secretCodeMessage.textContent = "✨ Purrmagic activated! +1000 steps added.";
+      footprints += 1000;
+      updateUI();
+    } else if (code === "shadowclaw") {
+      secretCodeMessage.textContent = "🖤 Shadow Claw challenge unlocked!";
+      continueLore();
+    } else {
+      secretCodeMessage.textContent = "❌ Invalid code.";
+    }
+    secretCodeInput.value = "";
+  }
+
+  // Click handler on cat
+  cat.addEventListener("click", () => {
+    if (!bossActive && !inNemesisMode) {
+      footprints += stepValue;
+      if (footprints > 100000) footprints = 100000;
+      updateUI();
+      if (footprints >= 100000) {
+        purrstigeBtn.disabled = false;
+      }
+    }
+  });
+
+  // Keyboard accessibility for cat clicker
+  cat.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      cat.click();
+    }
+  });
+
+  // Initialize UI
+  updateUI();
+</script>
+
+</body>
+</html>

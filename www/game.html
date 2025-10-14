@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🐱 Ultimate Cat Clicker 🐱</title>
+  <link rel="stylesheet" href="halloween.css">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+  <style>
+.reset-confirm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(45deg, #2d1b35, #1a0d1f);
+  padding: 30px;
+  border-radius: 15px;
+  border: 3px solid #ff6b6b;
+  z-index: 3000;
+  text-align: center;
+  display: none;
+  color: white;
+}
+
+.reset-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.reset-yes {
+  background: #ff6b6b !important;
+}
+
+.reset-no {
+  background: #4ecdc4 !important;
+}
+</style>
+<style>
+body {
+    cursor: url('cat.cur'), auto;
+}
+
+#clicker {
+    cursor: url('cat.cur'), auto;
+}
+</style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <!-- buttons i think-->
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showScreen('game')">🎮 Game</button>
+    <button class="nav-btn" onclick="showScreen('minigames')">🎯 Mini Games</button>
+    <button class="nav-btn" onclick="startAdventure()">🏰 Adventure</button>
+    <button class="nav-btn" onclick="showScreen('credits')">📜 Credits</button>
+    <button class="nav-btn reset-btn" onclick="showResetConfirm()">🗑️ Reset</button>
+  </div>
+
+  <!-- the starting page where u start ur adventeruue (adventure, was lazy to correct it) -->
+  <div id="loreScreen">
+    <h2>🐱 The Legend of Whiskers the Eternal 🌟</h2>
+    <p>
+      Long ago, Whiskers Nemesis possessed infinite power to generate fish treats through pure feline magic. But an evil vacuum cleaner sealed away this power, scattering it across dimensions.
+    </p>
+    <p>
+      Each click you make channels cosmic energy through Whiskers, slowly breaking the ancient curse. Assemble a team of magical helpers, unlock sacred achievements, and compete on the interdimensional leaderboard!
+    </p>
+    <p>
+      Will you become the ultimate Cat Clicking Champion and restore Whiskers to their full glory? The fate of all cat-kind rests in your clicking fingers! 🐾✨
+    </p>
+    <button onclick="startGame()">🚀 Accept the Sacred Quest! 🐾</button>
+  </div>
+
+  <!-- credits -->
+  <div id="creditsScreen" class="screen">
+    <div class="credits-content">
+      <h2>🏆 Credits & Thanks</h2>
+      <p><strong>Note:</strong> Thank you for playing my game! I have put much work into this project and I hope you enjoyed it. If you have any feedback or suggestions, please let me know. I would love to hear from you!</p>
+      <p><strong>-The Ultimate Cat Clicker Team</strong></p>
+
+      <div class="credits-list">
+        <h3>🎨 Credits:</h3>
+        <ul>
+          <li><strong>Cat Image:</strong> https://www.pngall.com/cat-emoji-png/</li>
+          <li><strong>Slide Images:</strong> Cat Warriors, PNGALL, Pixabay</li>
+          <li><strong>Font:</strong> Arial, sans-serif</li>
+          <li><strong>Icons:</strong> https://emojipedia.org/</li>
+          <li><strong>Game Engine:</strong> JavaScript, HTML5, CSS3</li>
+          <li><strong>Platform:</strong> Replit</li>
+        </ul>
+      </div>
+
+      <p><strong>🚀 Future Plans:</strong> I plan on adding more features in the future, such as a save system, more achievements, and enhanced multiplayer features.</p>
+
+      <p><strong>Thank you for playing my game! I hope you enjoyed it!</strong></p>
+      <p><em>-The Ultimate Cat Clicker Team</em></p>
+
+      <button class="nav-btn" onclick="showScreen('game')" style="margin-top: 20px;">🎮 Back to Game</button>
+    </div>
+  </div>
+
+  <!-- mini games -->
+  <div id="minigamesScreen" class="screen">
+    <div class="minigame-container">
+      <h2>🎯 Cat Memory Challenge</h2>
+      <p>Remember the pattern of glowing cats! Score: <span id="memoryScore">0</span></p>
+      <div class="minigame-grid" id="memoryGrid"></div>
+      <button class="nav-btn" onclick="startMemoryGame()">🎮 Start Game</button>
+      <button class="nav-btn" onclick="showScreen('game')">🏠 Back to Main</button>
+    </div>
+
+    <div class="minigame-container">
+      <h2>🐟 Fish Catch Challenge</h2>
+      <p>Catch as many fish as possible in 30 seconds! Best: <span id="fishCatchBest">0</span></p>
+      <div style="height: 200px; position: relative; background: rgba(0,100,200,0.3); border-radius: 15px; margin: 20px 0;" id="fishCatchArea">
+        <div id="fishCatchScore" style="position: absolute; top: 10px; left: 10px; font-weight: bold;">Score: 0</div>
+        <div id="fishCatchTimer" style="position: absolute; top: 10px; right: 10px; font-weight: bold;">30s</div>
+      </div>
+      <button class="nav-btn" onclick="startFishCatch()">🎮 Start Fishing</button>
+    </div>
+  </div>
+
+  <!-- ucc game -->
+  <div class="container" id="gameContainer">
+    <h1>🌟 Ultimate Cat Clicker 🌟</h1>
+
+    <div id="clicker" onclick="clickCat()">
+      <img src="cat.png" alt="Magical Cat" id="catImage">
+    </div>
+
+    <div id="stats">
+      🍬 Candy Treats: <span id="fish">0</span><br>
+      ⚡ Treats/sec: <span id="fps">0</span><br>
+      🎯 Total Clicks: <span id="totalClicks">0</span><br>
+      🏆 Achievements: <span id="achievementCount">0</span>/<span id="totalAchievements">15</span><br>
+      ⭐ Cat Power Level: <span id="powerLevel">1</span><br>
+      🧬 Evolution Level: <span id="evolutionLevel">0</span><br>
+      💎 Purr Crystals: <span id="purrCrystals">0</span><br>
+      🔥 Combo Meter: <span id="comboMeter">0</span>/100<br>
+      🎮 Mini Game Wins: <span id="minigameWins">0</span>
+    </div>
+
+    <div class="panel">
+    <h3>🏆 Leaderboard</h3>
+    <div id="leaderboard">
+        <div>Loading leaderboard...</div>
+    </div>
+    <button onclick="updateLeaderboard()">Refresh</button>
+</div>
+    
+    <!-- adventure-->
+    <div style="text-align: center; margin: 20px;">
+      <button onclick="startAdventure()" class="nav-btn" style="font-size: 1.2em; padding: 15px 30px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4);">
+        🏰 Begin Epic Adventure! (Requires Power Level 5)
+      </button>
+    </div>
+
+    <!-- lil scroll message -->
+    <div style="text-align: center; margin: 20px; font-size: 1.2em; color: #4ecdc4; animation: pulse 2s infinite;">
+      ⬇️ Scroll down for upgrades, evolution, and more! ⬇️
+    </div>
+
+    <!-- cat evolves -->
+    <div id="catEvolution" style="text-align: center; margin: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+      <h3>🧬 Cat Evolution</h3>
+      <div id="evolutionDisplay">
+        <div>Current Form: <span id="currentForm">Kitten</span></div>
+        <div>Progress to next evolution: <span id="evolutionProgress">0</span>/10 levels</div>
+        <div id="evolutionImage" style="font-size: 4em; margin: 10px;">🐱</div>
+      </div>
+    </div>
+
+    <!-- combo meter -->
+    <div id="comboMeterDisplay" style="text-align: center; margin: 20px;">
+      <div style="background: rgba(255,255,255,0.1); border-radius: 25px; height: 20px; width: 300px; margin: 0 auto; position: relative;">
+        <div id="comboFill" style="background: linear-gradient(90deg, #ff6b6b, #4ecdc4); height: 100%; width: 0%; border-radius: 25px; transition: width 0.3s ease;"></div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: white;">
+          Combo: <span id="comboValue">0</span>/100
+        </div>
+      </div>
+    </div>
+
+    <!-- da evil kitty attacking -->
+    <div id="villainInvasion" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(45deg, #ff6b6b, #ff4757); color: white; padding: 30px; border-radius: 20px; z-index: 2000; text-align: center; border: 3px solid #fff;">
+      <h2>🦹‍♂️ VILLAIN CAT INVASION! 🦹‍♂️</h2>
+      <p>Sum dum ahh villain cat is trying to steal your fish!</p>
+      <p>Click rapidly to defend! <span id="defenseProgress">0</span>/<span id="defenseTarget">50</span></p>
+      <button id="defendButton" style="padding: 15px 30px; font-size: 1.2em; background: #4ecdc4; border: none; border-radius: 10px; color: white; cursor: pointer;" onclick="defendClick()">🛡️ DEFEND!</button>
+      <div>Time left: <span id="invasionTimer">30</span>s</div>
+    </div>
+
+<div id="resetConfirm" class="reset-confirm">
+  <h3>⚠️ RESET PROGRESS? ⚠️</h3>
+  <p>This will delete ALL your progress and cannot be undone!</p>
+  <div class="reset-buttons">
+    <button class="nav-btn reset-yes" onclick="confirmReset()">✅ YES, RESET</button>
+    <button class="nav-btn reset-no" onclick="cancelReset()">❌ CANCEL</button>
+  </div>
+</div>
+
+    <div class="game-panels">
+      <div class="panel" id="storyPanel">
+        <h3>📖 Chronicle of Whiskers</h3>
+        <div id="storySlideshow">
+          <div class="slideshow-container">
+            <div class="slide active" id="slide1">
+              <img src="slide1.png" alt="The Awakening" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 1: The Awakening</h4>
+                <p>The ancient cat stirs... Your first clicks have awakened something powerful. Whiskers' eyes begin to glow with mystical energy!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide2">
+              <img src="slide2.png" alt="Growing Power" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 2: Growing Power</h4>
+                <p>🌟 Whiskers purrs with growing power! The curse weakens as cosmic fish energy flows through the dimensions!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide3">
+              <img src="slide3.png" alt="Breaking the Seal" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 3: Breaking the Seal</h4>
+                <p>⚡ The vacuum cleaner's seal cracks! Whiskers' true form begins to emerge from the shadows of time!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide4">
+              <img src="slide4.png" alt="Ancient Runes" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 4: Ancient Runes</h4>
+                <p>🔥 Ancient runes appear around Whiskers! The prophecy speaks of great power awakening within!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide5">
+              <img src="slide5.png" alt="Rainbow Fish Rain" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 5: Rainbow Fish Rain</h4>
+                <p>🌈 Rainbow fish rain from the sky! Whiskers' power reaches legendary status across all realms!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide6">
+              <img src="slide6.png" alt="Multiverse Trembles" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 6: Multiverse Trembles</h4>
+                <p>🌌 The multiverse trembles! Whiskers ascends to become the Eternal Fish Guardian of all dimensions!</p>
+              </div>
+            </div>
+            <div class="slide" id="slide7">
+              <img src="slide7.png" alt="Supreme Champion" class="slide-image">
+              <div class="slide-caption">
+                <h4>Chapter 7: The Chosen One</h4>
+                <p>👑 YOU ARE THE CHOSEN ONE! Whiskers grants you the title of Supreme Cat Clicking Champion of the Universe!</p>
+              </div>
+            </div>
+            <div class="slideshow-controls">
+              <button onclick="previousSlide()" class="slide-btn">⬅️ Previous</button>
+              <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+              </span>
+              <button onclick="nextSlide()" class="slide-btn">Next ➡️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="achievementPanel">
+        <h3>🏅 Sacred Achievements</h3>
+        <div id="achievementList"></div>
+      </div>
+
+      <!-- prestige -->
+      <div class="panel" id="prestigePanel">
+        <h3>✨ PURRstige Mode</h3>
+        <p>Reset all progress for powerful Purr Crystals!</p>
+        <p>Available Crystals: <span id="availableCrystals">0</span> (need 1M fish)</p>
+        <button id="prestigeButton" onclick="prestige()" class="nav-btn" disabled>✨ PRESTIGE ✨</button>
+        <div id="crystalUpgrades" style="margin-top: 15px;">
+          <h4>💎 Crystal Upgrades</h4>
+          <div class="item" onclick="buyCrystalUpgrade('autoClicker')">
+            🤖 Auto Clicker Supreme<br>
+            Cost: 5 💎 | Auto-clicks every 0.1s
+          </div>
+          <div class="item" onclick="buyCrystalUpgrade('goldenCat')">
+            👑 Golden Cat Form<br>
+            Cost: 10 💎 | +1000% click power
+          </div>
+        </div>
+      </div>
+
+      <!-- choose your character ahh -->
+      <div class="panel" id="customizationPanel">
+        <h3>🎨 Cat Customization</h3>
+        <div>Current Skin: <span id="currentSkinName">Default</span></div>
+        <div id="skinSelector" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin: 15px 0;">
+          <!-- easter eggs kinda thing -->
+        </div>
+        <div id="secretClickables" style="margin-top: 20px;">
+          <h4>🔍 Secret Clickables Found</h4>
+          <p>Find hidden clickables around the game for special rewards!</p>
+          <div id="secretProgress">0/10 secrets found</div>
+        </div>
+      </div>
+
+      <!-- daily quest... requires node.js -->
+      <div class="panel" id="questsPanel">
+        <h3>📋 Daily Quests</h3>
+        <div id="questList">
+          <!-- refresh every 24 hours -->
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+          <button onclick="refreshQuests()" class="nav-btn">🔄 Refresh Quests</button>
+        </div>
+      </div>
+
+      <!-- ur journey -->
+      <div class="panel" id="loreJournalPanel">
+        <h3>📖 Cat Kingdom Lore Journal</h3>
+        <div id="loreEntries">
+          <p>Unlock lore entries as you evolve your cat...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop">
+      <div class="item" onclick="buyCursor()" id="cursorItem">
+        🐱 <strong>Kitten Apprentice</strong><br>
+        <small>"A young cat learning the ancient clicking arts"</small><br>
+        Cost: <span id="cursorCost">10</span> 🐟 | +1/sec<br>
+        Owned: <span id="cursorCount">0</span>
+      </div>
+      <div class="item" onclick="buyYarn()" id="yarnItem">
+        🧶 <strong>Enchanted Yarn Ball</strong><br>
+        <small>"Mystical yarn that attracts fish through dimensions"</small><br>
+        Cost: <span id="yarnCost">50</span> 🐟 | +3/sec<br>
+        Owned: <span id="yarnCount">0</span>
+      </div>
+      <div class="item" onclick="buyRobo()" id="roboItem">
+        🤖 <strong>Quantum Cat-Bot</strong><br>
+        <small>"Advanced AI with purr-fect clicking algorithms"</small><br>
+        Cost: <span id="roboCost">200</span> 🐟 | +15/sec<br>
+        Owned: <span id="roboCount">0</span>
+      </div>
+      <div class="item" onclick="buyWizard()" id="wizardItem">
+        🧙‍♂️ <strong>Arcane Cat Mage</strong><br>
+        <small>"Master of interdimensional fish summoning"</small><br>
+        Cost: <span id="wizardCost">1000</span> 🐟 | +50/sec<br>
+        Owned: <span id="wizardCount">0</span>
+      </div>
+      <div class="item" onclick="buyPortal()" id="portalItem">
+        🌀 <strong>Fish Portal Generator</strong><br>
+        <small>"Opens rifts to the infinite fish dimension"</small><br>
+        Cost: <span id="portalCost">5000</span> 🐟 | +200/sec<br>
+        Owned: <span id="portalCount">0</span>
+      </div>
+      <div class="item" onclick="buyDragon()" id="dragonItem">
+        🐉 <strong>Elder Dragon Cat</strong><br>
+        <small>"Ancient guardian of the celestial fish treasures"</small><br>
+        Cost: <span id="dragonCost">25000</span> 🐟 | +1000/sec<br>
+        Owned: <span id="dragonCount">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- this has the js needed for the game to run properly or js the game logic -->
+  <script src="js/game/main.js"></script>
+  <script src="js/game/shop.js"></script>
+  <script src="js/game/achievements.js"></script>
+  <script src="js/ui/display.js"></script>
+  <script src="js/ui/customization.js"></script>
+  <script src="js/minigames/memory.js"></script>
+  <script src="js/minigames/fishing.js"></script>
+  <script src="js/adventure/adventure.js"></script>
+  <script src="js/game/music.js"></script>
+  <script src="js/game/anti-cheat.js"></script>
+  <script src="js/game/localstorage.js"></script>
+  <script>
+function showResetConfirm() {
+  document.getElementById('resetConfirm').style.display = 'block';
+}
+
+function cancelReset() {
+  document.getElementById('resetConfirm').style.display = 'none';
+}
+
+function confirmReset() {
+  localStorage.removeItem('catClickerSave');
+  document.getElementById('resetConfirm').style.display = 'none';
+  alert('Progress reset! Reloading...');
+  setTimeout(() => window.location.reload(), 1000);
+}
+</script>
+  <script>
+// Load playerId from localStorage or create new one
+const playerId = localStorage.getItem('catPlayerId') || 'cat' + Math.floor(Math.random() * 10000);
+localStorage.setItem('catPlayerId', playerId);
+
+const backendURL = 'https://ucc-backend-dltx.onrender.com';
+
+async function updateLeaderboard() {
+    await fetch(backendURL + '/leaderboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            playerId: playerId, 
+            name: playerId, 
+            fish: fish 
+        })
+    });
+    
+    const response = await fetch(backendURL + '/leaderboard');
+    const leaderboard = await response.json();
+    
+    const html = leaderboard.map((player, index) => 
+        `<div>${index + 1}. ${player.name}${player.name === playerId ? ' (You)' : ''} - ${player.fish} 🐟</div>`
+    ).join('');
+    
+    document.getElementById('leaderboard').innerHTML = html;
+}
+</script>
+</body>
+</html>
