@@ -42,7 +42,7 @@ jobs:
     - name: Update Android SDK and fix resources
       run: |
         cd android
-        # 1. Создаём недостающие цвета в ресурсах
+        # 1. Создаём недостающие цвета
         mkdir -p app/src/main/res/values
         cat > app/src/main/res/values/colors.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
@@ -53,7 +53,7 @@ jobs:
         </resources>
         EOF
 
-        # 2. Переписываем build.gradle с правильной настройкой namespace
+        # 2. Переписываем build.gradle
         cat > app/build.gradle << 'EOF'
         apply plugin: 'com.android.application'
         android {
@@ -88,17 +88,37 @@ jobs:
         }
         EOF
 
-        # 3. ИСПРАВЛЯЕМ: Обновляем существующий styles.xml вместо создания themes.xml
+        # 3. Создаём полный styles.xml с обеими темами
         cat > app/src/main/res/values/styles.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
+            <!-- Основная тема приложения -->
             <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
                 <item name="colorPrimary">@color/colorPrimary</item>
                 <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
                 <item name="colorAccent">@color/colorAccent</item>
             </style>
+            
+            <!-- Тема для заставки (Splash Screen) -->
+            <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+                <item name="android:background">@color/colorPrimary</item>
+            </style>
         </resources>
         EOF
+
+        # 4. Исправляем AndroidManifest.xml
+        # Заменяем тему на AppTheme.NoActionBarLaunch, если она там есть
+        if grep -q "AppTheme.NoActionBarLaunch" app/src/main/AndroidManifest.xml; then
+            echo "✅ Тема уже установлена"
+        else
+            # Если темы нет, добавляем её в тег application
+            sed -i 's/android:theme="@style\/AppTheme"/android:theme="@style\/AppTheme.NoActionBarLaunch"/g' app/src/main/AndroidManifest.xml
+            echo "✅ Тема добавлена в AndroidManifest.xml"
+        fi
+
+        # Проверяем содержимое AndroidManifest.xml для отладки
+        echo "📄 Содержимое AndroidManifest.xml:"
+        cat app/src/main/AndroidManifest.xml
 
     - name: Copy web assets
       run: |
