@@ -8,15 +8,15 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        
+
     - name: Create Capacitor project
       run: |
         echo '{
@@ -30,18 +30,30 @@ jobs:
             "@capacitor/android": "^6.0.0"
           }
         }' > package.json
-        
+
     - name: Install dependencies
       run: npm install
-      
+
     - name: Initialize Capacitor
       run: |
         npx cap init "PhytoNote" "com.phytonote.app" --web-dir www
         npx cap add android
-        
-    - name: Update Android SDK versions for Android 15
+
+    - name: Update Android SDK and fix resources
       run: |
         cd android
+        # 1. Создаём недостающие цвета в ресурсах
+        mkdir -p app/src/main/res/values
+        cat > app/src/main/res/values/colors.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <color name="colorPrimary">#1e3a1e</color>
+            <color name="colorPrimaryDark">#1e3a1e</color>
+            <color name="colorAccent">#3a7a3a</color>
+        </resources>
+        EOF
+
+        # 2. Переписываем build.gradle с правильной настройкой namespace и удаляем ссылки на SplashScreen
         cat > app/build.gradle << 'EOF'
         apply plugin: 'com.android.application'
         android {
@@ -75,13 +87,26 @@ jobs:
             androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
         }
         EOF
-        
+
+        # 3. Упрощаем тему (убираем ссылку на SplashScreen)
+        mkdir -p app/src/main/res/values
+        cat > app/src/main/res/values/themes.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+                <item name="colorPrimary">@color/colorPrimary</item>
+                <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+                <item name="colorAccent">@color/colorAccent</item>
+            </style>
+        </resources>
+        EOF
+
     - name: Copy web assets
       run: |
         mkdir -p www
         cp -r assets/* www/
         echo "✅ All files copied to www!"
-        
+
     - name: Use custom icon as app icon
       run: |
         if [ -f "assets/icon-192.png" ]; then
@@ -91,24 +116,24 @@ jobs:
           mkdir -p android/app/src/main/res/mipmap-xhdpi
           mkdir -p android/app/src/main/res/mipmap-xxhdpi
           mkdir -p android/app/src/main/res/mipmap-xxxhdpi
-          
+
           cp assets/icon-192.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
           cp assets/icon-192.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
           cp assets/icon-192.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
           cp assets/icon-192.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
           cp assets/icon-192.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          
+
           echo "✅ Icon set successfully!"
         else
           echo "⚠️  icon-192.png not found - using default Capacitor icon"
         fi
-        
+
     - name: Build Android APK
       run: |
         cd android
         chmod +x ./gradlew
         ./gradlew assembleDebug
-        
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
