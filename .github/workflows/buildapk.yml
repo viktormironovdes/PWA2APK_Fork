@@ -39,10 +39,27 @@ jobs:
         npx cap init "PhytoNote" "com.phytonote.app" --web-dir www
         npx cap add android
 
-    - name: Update Android SDK and fix resources
+    - name: Fix Android project
       run: |
         cd android
-        # 1. Создаём недостающие цвета
+
+        # 1. Создаём правильный MainActivity.java
+        mkdir -p app/src/main/java/com/phytonote/app
+        cat > app/src/main/java/com/phytonote/app/MainActivity.java << 'EOF'
+        package com.phytonote.app;
+
+        import android.os.Bundle;
+        import com.getcapacitor.BridgeActivity;
+
+        public class MainActivity extends BridgeActivity {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+        }
+        EOF
+
+        # 2. Создаём colors.xml
         mkdir -p app/src/main/res/values
         cat > app/src/main/res/values/colors.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
@@ -53,7 +70,7 @@ jobs:
         </resources>
         EOF
 
-        # 2. Переписываем build.gradle
+        # 3. Обновляем build.gradle
         cat > app/build.gradle << 'EOF'
         apply plugin: 'com.android.application'
         android {
@@ -79,29 +96,28 @@ jobs:
             mavenCentral()
         }
         dependencies {
+            implementation fileTree(dir: 'libs', include: ['*.jar'])
             implementation 'androidx.appcompat:appcompat:1.7.0'
             implementation 'com.google.android.material:material:1.12.0'
             implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+            implementation 'androidx.core:core-splashscreen:1.0.1'
+            implementation project(':capacitor-android')
             testImplementation 'junit:junit:4.13.2'
             androidTestImplementation 'androidx.test.ext:junit:1.2.1'
             androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-            // Добавляем зависимость для Splash Screen API
-            implementation 'androidx.core:core-splashscreen:1.0.1'
         }
         EOF
 
-        # 3. Создаём правильные стили для Splash Screen (как в документации)
+        # 4. Создаём styles.xml с правильной темой для Splash Screen
         cat > app/src/main/res/values/styles.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <!-- Основная тема приложения -->
             <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
                 <item name="colorPrimary">@color/colorPrimary</item>
                 <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
                 <item name="colorAccent">@color/colorAccent</item>
             </style>
-            
-            <!-- Тема для заставки (Splash Screen) для Android 12+ -->
+
             <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
                 <item name="android:background">@color/colorPrimary</item>
                 <item name="windowSplashScreenBackground">@color/colorPrimary</item>
@@ -111,13 +127,46 @@ jobs:
         </resources>
         EOF
 
-        # 4. Проверяем и исправляем AndroidManifest.xml
-        if grep -q "AppTheme.NoActionBarLaunch" app/src/main/AndroidManifest.xml; then
-            echo "✅ Тема уже установлена"
-        else
-            sed -i 's/android:theme="@style\/AppTheme"/android:theme="@style\/AppTheme.NoActionBarLaunch"/g' app/src/main/AndroidManifest.xml
-            echo "✅ Тема добавлена в AndroidManifest.xml"
-        fi
+        # 5. Проверяем и исправляем AndroidManifest.xml
+        cat > app/src/main/AndroidManifest.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+            package="com.phytonote.app">
+
+            <application
+                android:allowBackup="true"
+                android:icon="@mipmap/ic_launcher"
+                android:label="@string/app_name"
+                android:roundIcon="@mipmap/ic_launcher_round"
+                android:supportsRtl="true"
+                android:theme="@style/AppTheme.NoActionBarLaunch">
+
+                <activity
+                    android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+                    android:name="com.phytonote.app.MainActivity"
+                    android:label="@string/app_name"
+                    android:theme="@style/AppTheme.NoActionBarLaunch"
+                    android:exported="true">
+
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+
+                </activity>
+
+            </application>
+
+        </manifest>
+        EOF
+
+        # 6. Добавляем файл strings.xml (чтобы не было ошибок)
+        cat > app/src/main/res/values/strings.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <string name="app_name">PhytoNote</string>
+        </resources>
+        EOF
 
     - name: Copy web assets
       run: |
