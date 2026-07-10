@@ -53,7 +53,7 @@ jobs:
         </resources>
         EOF
 
-        # 2. Переписываем build.gradle с правильной настройкой namespace и удаляем ссылки на SplashScreen
+        # 2. Переписываем build.gradle с правильной настройкой namespace
         cat > app/build.gradle << 'EOF'
         apply plugin: 'com.android.application'
         android {
@@ -88,9 +88,8 @@ jobs:
         }
         EOF
 
-        # 3. Упрощаем тему (убираем ссылку на SplashScreen)
-        mkdir -p app/src/main/res/values
-        cat > app/src/main/res/values/themes.xml << 'EOF'
+        # 3. ИСПРАВЛЯЕМ: Обновляем существующий styles.xml вместо создания themes.xml
+        cat > app/src/main/res/values/styles.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
             <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
