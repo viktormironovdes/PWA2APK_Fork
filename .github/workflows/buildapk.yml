@@ -85,10 +85,12 @@ jobs:
             testImplementation 'junit:junit:4.13.2'
             androidTestImplementation 'androidx.test.ext:junit:1.2.1'
             androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+            // Добавляем зависимость для Splash Screen API
+            implementation 'androidx.core:core-splashscreen:1.0.1'
         }
         EOF
 
-        # 3. Создаём полный styles.xml с обеими темами
+        # 3. Создаём правильные стили для Splash Screen (как в документации)
         cat > app/src/main/res/values/styles.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
@@ -99,26 +101,23 @@ jobs:
                 <item name="colorAccent">@color/colorAccent</item>
             </style>
             
-            <!-- Тема для заставки (Splash Screen) -->
+            <!-- Тема для заставки (Splash Screen) для Android 12+ -->
             <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
                 <item name="android:background">@color/colorPrimary</item>
+                <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+                <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+                <item name="postSplashScreenTheme">@style/AppTheme</item>
             </style>
         </resources>
         EOF
 
-        # 4. Исправляем AndroidManifest.xml
-        # Заменяем тему на AppTheme.NoActionBarLaunch, если она там есть
+        # 4. Проверяем и исправляем AndroidManifest.xml
         if grep -q "AppTheme.NoActionBarLaunch" app/src/main/AndroidManifest.xml; then
             echo "✅ Тема уже установлена"
         else
-            # Если темы нет, добавляем её в тег application
             sed -i 's/android:theme="@style\/AppTheme"/android:theme="@style\/AppTheme.NoActionBarLaunch"/g' app/src/main/AndroidManifest.xml
             echo "✅ Тема добавлена в AndroidManifest.xml"
         fi
-
-        # Проверяем содержимое AndroidManifest.xml для отладки
-        echo "📄 Содержимое AndroidManifest.xml:"
-        cat app/src/main/AndroidManifest.xml
 
     - name: Copy web assets
       run: |
