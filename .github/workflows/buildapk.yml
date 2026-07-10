@@ -45,6 +45,7 @@ jobs:
         cat > app/build.gradle << 'EOF'
         apply plugin: 'com.android.application'
         android {
+            namespace "com.phytonote.app"
             compileSdkVersion 35
             defaultConfig {
                 applicationId "com.phytonote.app"
